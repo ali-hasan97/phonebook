@@ -1,0 +1,2 @@
+# Mongo DB, Express, React, and Node exercises
+The purpose of this repo is to learn/brush up on the MERN stack guided by the University of Helsinki's Full Stack Open Course. This course also goes over Redux, GraphQL, TypeScript, React Native, and CI/CD concepts.
