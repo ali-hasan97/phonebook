@@ -4,6 +4,7 @@ import Form from './components/Form'
 import axios from 'axios'
 
 const App = () => {
+  const [persons, setPersons] = useState([]) 
 
   const hook = () => {
     axios
@@ -13,8 +14,6 @@ const App = () => {
     })
   }
   useEffect(hook,[])
-
-  const [persons, setPersons] = useState([]) 
 
   return (
     <div>
