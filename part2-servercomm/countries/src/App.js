@@ -1,6 +1,5 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
-import CountryList from './components/CountryList';
 import Search from './components/Search';
 
 function App() {

@@ -24,7 +24,7 @@ const Search = ({ countries }) => {
     } else {
       setDisplay("filtered");
     }
-  }, [[]]);
+  }, [[], search]);
 
   const displayMethod = () => {
     if (display === "filtered") {
@@ -38,6 +38,8 @@ const Search = ({ countries }) => {
                   key={country.name.common}
                   setSearch={setSearch}
                   search={search}
+                  setFiltered={setFiltered}
+                  country={country}
                 />
               );
             })}

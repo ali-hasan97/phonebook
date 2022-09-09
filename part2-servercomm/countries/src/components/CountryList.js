@@ -1,14 +1,17 @@
-const CountryList = ({ name, setSearch, search }) => {
+import { useEffect } from "react"
+import SingleView from "./SingleView"
+
+const CountryList = ({ name, setSearch, search, country, setFiltered }) => {
     const handleShow = (event) =>  {
-        setSearch(event.target.id)
         console.log(search)
         console.log(event.target.id)
+        setFiltered([country])
     }
 
     return (
         <tr>
             <td>{name}</td>
-            <td><button id={name} key={name} onClick={(event) => handleShow(event)}>show</button></td>
+            <td><button id={name} key={name} country={country} onClick={(event) => handleShow(event)}>show</button></td>
         </tr>
         );    
 }
