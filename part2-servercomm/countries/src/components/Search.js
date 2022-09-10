@@ -1,76 +1,54 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import CountryList from "./CountryList";
+import axios from "axios";
 import SingleView from "./SingleView";
+import CountryList from "./CountryList";
 
 const Search = ({ countries }) => {
   const [search, setSearch] = useState("");
-  const [filtered, setFiltered] = useState([]);
-  const [display, setDisplay] = useState(["Be more specific"]);
-
-  useEffect(() => {
-    setFiltered(
-      countries.filter((country) =>
-        country.name.common.toLowerCase().includes(search.toLowerCase())
-      )
-    );
-  }, [search, countries]);
-
-  useEffect(() => {
-    if (filtered.length > 20) {
-      setDisplay("Be more specific");
-    } else if (filtered.length === 1) {
-      setDisplay("single");
-    } else {
-      setDisplay("filtered");
-    }
-  }, [[], search]);
-
-  const displayMethod = () => {
-    if (display === "filtered") {
-      return (
-        <table>
-          <tbody>
-            {filtered.slice(0, 20).map((country) => {
-              return (
-                <CountryList
-                  name={country.name.common}
-                  key={country.name.common}
-                  setSearch={setSearch}
-                  search={search}
-                  setFiltered={setFiltered}
-                  country={country}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-      );
-    } else if (display === "single") {
-      return (
-        <div>
-          {filtered.map((country) => {
-            return <SingleView country={country} key={country.name.common} />;
-          })}
-        </div>
-      );
-    } else {
-      return <h2>Be more specific!</h2>;
-    }
-  };
+  const filtered = countries.filter((country) => country.name.common.toLowerCase().includes(search));
 
   return (
     <div>
       <div>
-        Search:{" "}
+        Search:
         <input
-          onChange={(event) => setSearch(event.target.value.toLowerCase())}
+          onChange={(event) => {
+            setSearch(event.target.value.toLowerCase());
+          }}
+          value={search}
         />
       </div>
       <h1>Search a Country</h1>
-      {displayMethod()}
+      <DisplayMethod filtered={filtered} search={search} setSearch={setSearch} />
     </div>
   );
+};
+
+const DisplayMethod = ({ filtered, search, setSearch }) => {
+  if (filtered.length === 1) {
+    return <SingleView country={filtered[0]} />
+  } else if (filtered.length < 20 && filtered.length > 1) {
+    return (
+      <table>
+      <tbody>
+        {filtered.slice(0, 20).map((country) => {
+        return (
+        <CountryList 
+        name={country.name.common}
+        setSearch={setSearch}
+        country={country}
+        key={country.name.common}
+        />)
+        })}
+      </tbody>
+      </table>
+    );
+  } else if (filtered.length === 0) {
+    return <h2>No matches found!</h2>
+  } else {
+    return <h2>Be more specific!</h2>;
+  }
 };
 
 export default Search;
