@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import phonebookService from '../services/phonebook'
 
-const Form = ({ persons, setPersons, personDeleted }) => {
+const Form = ({ persons, setPersons, personDeleted, setSuccess, setFailure }) => {
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
 
@@ -29,6 +29,19 @@ const Form = ({ persons, setPersons, personDeleted }) => {
           phonebookService
             .updateService(newPerson, id)
             .then(personDeleted)
+            .catch(error => {
+              setFailure(`${newPerson.name} has already been deleted from the phonebook`)
+              setTimeout(() => {
+                setFailure(null)
+              }, 5000)
+              return personDeleted()
+            })
+          setSuccess(`Updated ${newPerson.name}'s number`)
+          setTimeout(() => {
+            setSuccess(null)
+          }, 5000)
+          return
+        } else {
           return
         }
       }
@@ -40,6 +53,10 @@ const Form = ({ persons, setPersons, personDeleted }) => {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
       })
+    setSuccess(`Added ${newPerson.name} to the phonebook`)
+    setTimeout(() => {
+      setSuccess(null)
+    }, 5000)
   };
 
   return (
