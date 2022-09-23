@@ -15,11 +15,13 @@ const App = () => {
   }
   useEffect(hook,[])
 
+  const personDeleted = hook
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Form persons={persons} setPersons={setPersons} />
-      <Search persons={persons}/>
+      <Form persons={persons} setPersons={setPersons} personDeleted={personDeleted} />
+      <Search persons={persons} personDeleted={personDeleted} />
     </div>
   )
 }

@@ -1,20 +1,18 @@
 import React from "react";
+import Book from './Book';
+import phonebookServices from "../services/phonebook";
 import { useState } from "react";
+import axios from 'axios'
 
-const Book = ({ name, number, search }) => {
-  if (
-    name.toLowerCase().includes(search) | number.toLowerCase().includes(search)
-  ) {
-    return (
-      <tr>
-        <td>{name}</td>
-        <td>{number}</td>
-      </tr>
-    );
+const remove = (id, name, personDeleted) => {
+  if (window.confirm(`Delete ${name}?`)) {
+    phonebookServices
+      .removeService(id)
+      .then(personDeleted)
   }
-};
+}
 
-const Search = ({ persons }) => {
+const Search = ({ persons, personDeleted }) => {
   const [search, setSearch] = useState("");
   return (
     <div>
@@ -33,6 +31,7 @@ const Search = ({ persons }) => {
               name={person.name}
               number={person.number}
               search={search}
+              remove={() => remove(person.id, person.name, personDeleted)}
             />
           ))}
         </tbody>

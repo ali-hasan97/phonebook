@@ -1,7 +1,9 @@
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
+import phonebookService from '../services/phonebook'
 
-const Form = ({ persons, setPersons }) => {
+const Form = ({ persons, setPersons, personDeleted }) => {
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
 
@@ -9,17 +11,35 @@ const Form = ({ persons, setPersons }) => {
     event.preventDefault();
     let newPerson = {
       name: newName,
-      number: newNum,
+      number: newNum
     };
+
+    // check if number already in phonebook
     for (let x in persons) {
-      if (persons[x].name === newPerson.name) {
-        return alert(`${newPerson.name} is already in the phonebook!`);
-      }
       if (persons[x].number === newPerson.number) {
         return alert(`${newPerson.number} is already in the phonebook!`);
       }
     }
-    setPersons(persons.concat(newPerson));
+
+    // if person already in phonebook, ask to update
+    for (let x in persons) {
+      if (persons[x].name === newPerson.name) {
+        if (window.confirm(`${newPerson.name} is already in the phonebook, replace the old number with this new one?`)) {
+          const id = persons[x].id
+          phonebookService
+            .updateService(newPerson, id)
+            .then(personDeleted)
+          return
+        }
+      }
+    }
+
+    // if person and number are not already in phonebook, add person
+    phonebookService
+      .createService(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+      })
   };
 
   return (
