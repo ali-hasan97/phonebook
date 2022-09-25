@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Form from './components/Form'
-import axios from 'axios'
 import Success from './components/Success'
 import Failure from './components/Failure'
+import phonebookService from './services/phonebook'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,11 +11,11 @@ const App = () => {
   const [failure, setFailure] = useState(null)
 
   const hook = () => {
-    axios
-    .get('/api/persons')
-    .then((response) => {
-      setPersons(response.data)
-    })
+    phonebookService
+      .getService()
+      .then(returnedPersons => {
+        setPersons(returnedPersons)
+      })
   }
   useEffect(hook,[])
 
