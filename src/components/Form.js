@@ -28,18 +28,20 @@ const Form = ({ persons, setPersons, personDeleted, setSuccess, setFailure }) =>
           const id = persons[x].id
           phonebookService
             .updateService(newPerson, id)
-            .then(personDeleted)
+            .then(() => {
+              setSuccess(`Updated ${newPerson.name}'s number`)
+              setTimeout(() => {
+                setSuccess(null)
+              }, 5000)
+              return personDeleted()
+            })
             .catch(error => {
-              setFailure(`${newPerson.name} has already been deleted from the phonebook`)
+              setFailure(error.response.data.error)
               setTimeout(() => {
                 setFailure(null)
               }, 5000)
               return personDeleted()
             })
-          setSuccess(`Updated ${newPerson.name}'s number`)
-          setTimeout(() => {
-            setSuccess(null)
-          }, 5000)
           return
         } else {
           return
@@ -53,10 +55,18 @@ const Form = ({ persons, setPersons, personDeleted, setSuccess, setFailure }) =>
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
       })
-    setSuccess(`Added ${newPerson.name} to the phonebook`)
-    setTimeout(() => {
-      setSuccess(null)
-    }, 5000)
+      .then(() => {
+        setSuccess(`Added ${newPerson.name} to the phonebook`)
+        setTimeout(() => {
+          setSuccess(null)
+        }, 5000)
+      })
+      .catch(error => {
+        setFailure(error.response.data.error)
+        setTimeout(() => {
+          setFailure(null)
+        }, 5000)
+      })
   };
 
   return (
